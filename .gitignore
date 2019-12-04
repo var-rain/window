@@ -1,0 +1,10 @@
+# projct default files.
+.idea/workspace.xml
+.idea/vcs.xml
+.idea/misc.xml
+.idea/window.iml
+.idea/modules.xml
+
+# build out files.
+./build
+*.exe
