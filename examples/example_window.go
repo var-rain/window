@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/var-rain/window/win"
+	"github.com/var-rain/window/windows"
 )
 
 // ---------------------------------------------------------
@@ -14,7 +14,7 @@ import (
 const WINDOW_CLASS string = "MAIN_WINDOW_CLASS"
 
 func main() {
-	inst := win.GetModuleHandle("")
+	inst := windows.GetModuleHandle("")
 
 	var err error
 
@@ -26,61 +26,61 @@ func main() {
 	}
 
 	// create registered window.
-	wnd, err := win.CreateWindow(WINDOW_CLASS, "Window By Golang",
-		win.WS_OVERLAPPEDWINDOW, 0,
-		win.CW_USEDEFAULT, win.CW_USEDEFAULT, win.CW_USEDEFAULT, win.CW_USEDEFAULT,
+	wnd, err := windows.CreateWindow(WINDOW_CLASS, "Window By Golang",
+		windows.WS_OVERLAPPEDWINDOW, 0,
+		windows.CW_USEDEFAULT, windows.CW_USEDEFAULT, windows.CW_USEDEFAULT, windows.CW_USEDEFAULT,
 		0, 0, inst, 0)
 	if err != nil {
 		fmt.Println("window create failed")
 		return
 	}
-	win.ShowWindow(wnd, win.SW_SHOW)
-	win.UpdateWindow(wnd)
+	windows.ShowWindow(wnd, windows.SW_SHOW)
+	windows.UpdateWindow(wnd)
 
 	// main message loop.
-	var msg win.MSG
-	msg.Message = win.WM_QUIT + 1
+	var msg windows.MSG
+	msg.Message = windows.WM_QUIT + 1
 
-	for win.GetMessage(&msg, 0, 0, 0) > 0 {
-		win.TranslateMessage(&msg)
-		win.DispatchMessage(&msg)
+	for windows.GetMessage(&msg, 0, 0, 0) > 0 {
+		windows.TranslateMessage(&msg)
+		windows.DispatchMessage(&msg)
 	}
 
 	fmt.Println("application finished with exit code", msg.WParam)
 }
 
-func WndProc(hWnd win.HWND, message uint32, wParam uintptr, lParam uintptr) uintptr {
+func WndProc(hWnd windows.HWND, message uint32, wParam uintptr, lParam uintptr) uintptr {
 	switch message {
-	case win.WM_DESTROY:
-		win.PostQuitMessage(0)
-	case win.WM_COMMAND:
+	case windows.WM_DESTROY:
+		windows.PostQuitMessage(0)
+	case windows.WM_COMMAND:
 		OnCommand(hWnd, wParam, lParam)
 	default:
-		return win.DefWindowProc(hWnd, message, wParam, lParam)
+		return windows.DefWindowProc(hWnd, message, wParam, lParam)
 	}
 	return 0
 }
 
-func OnCommand(hWnd win.HWND, wParam uintptr, lParam uintptr) {
-	win.DefWindowProc(hWnd, win.WM_COMMAND, wParam, lParam)
+func OnCommand(hWnd windows.HWND, wParam uintptr, lParam uintptr) {
+	windows.DefWindowProc(hWnd, windows.WM_COMMAND, wParam, lParam)
 }
 
-func WindowRegisterClass(hInstance win.HINSTANCE) (atom uint16, err error) {
-	var wc win.WNDCLASS
-	wc.Style = win.CS_HREDRAW | win.CS_VREDRAW
+func WindowRegisterClass(hInstance windows.HINSTANCE) (atom uint16, err error) {
+	var wc windows.WNDCLASS
+	wc.Style = windows.CS_HREDRAW | windows.CS_VREDRAW
 	wc.PfnWndProc = WndProc
 	wc.CbClsExtra = 0
 	wc.CbWndExtra = 0
 	wc.HInstance = hInstance
 	wc.HIcon = 0
-	wc.HCursor, err = win.LoadCursorById(0, win.IDC_ARROW)
+	wc.HCursor, err = windows.LoadCursorById(0, windows.IDC_ARROW)
 	if err != nil {
 		return
 	}
 	wc.Menu = ""
-	wc.HbrBackground = win.COLOR_WINDOW + 1
+	wc.HbrBackground = windows.COLOR_WINDOW + 1
 	wc.PszClassName = WINDOW_CLASS
 	wc.HIconSmall = 0
 
-	return win.RegisterClass(&wc)
+	return windows.RegisterClass(&wc)
 }
